@@ -1,160 +1,147 @@
+// Online C++ compiler to run C++ program online
 #include <iostream>
 #include <vector>
 using namespace std;
-#include <random>
-#include <chrono>
-#include <cmath> 
 
-class Matriz {
-   private:
-    vector<vector<int>> m;  // usamos 
+class Matriz{ //nombre de la clase
+    private:
+    vector<vector<int>> m;
+    int cc,cf;
     public:
-    // Método para cargar elementos desde teclado
-    void cargar() {
-        int cf,cc, valor;
-        cout << "Ingresar # filas: ";
-        cin >> cf;
-        cout << "Ingresar # columnas: ";
-        cin >> cc;
-        m.clear();  // limpiamos por si ya tenía datos
-        
-        for (int f = 0; f < cf; f++){ 
-            vector<int> fila;
-            for (int c = 0; c <cc; c++) {
-             cout << "Ingrese el elemento: [" << f << "]["<<c<<"]: ";
-            cin >> valor;
-            fila.push_back(valor);
+    
+    void matrizCargada(){
+        m.clear();
+        cc=4; cf=4;
+        vector<int> fila={1,2,3,4};
+        m.push_back(fila);
+        fila={5,6,7,8};
+        m.push_back(fila);
+        fila={6,2,2,2};
+        m.push_back(fila);
+        fila={1,1,1,1};
+        m.push_back(fila);
+    }
+    void cargar(int cantf,int cantc){
+        cc=cantc; cf=cantf;
+        int elemento;
+        m.clear();//limpiar o borrar la variable m
+        for (int f=0;f<cantf;f++ ){
+          vector<int> fila;
+          for (int c=0;c<cantc;c++ ){
+             cout<<"elemento ["<<f<<"]"<<"["<<c<<"] : ";
+             cin>>elemento;
+             fila.push_back(elemento);
+          } 
+          m.push_back(fila);
+        }
+    }
+    void mostrar1(){
+        for (int f=0;f<cf;f++){
+            for (int c=0;c<cc;c++){
+                cout<<m[f][c]<<" , ";
             }
-            m.push_back(fila);
+            cout<<endl;
+        }
     }
-        
-    }
-    void cargarOrdenado() {
-        vector<int> fila = {1, 2, 3}; 
-        m.push_back(fila);
-        fila = {4, 5, 6}; 
-        m.push_back(fila);
-        fila = {7, 8, 9}; 
-        m.push_back(fila);
-    }
-    
-    void mostrar() {
-        for (int f = 0; f < m.size(); f++) {
-             for (int c = 0; c < m[f].size(); c++) {
-                 cout << m[f][c]<<" , ";
-             }
-             cout << endl;
-          }
+     void mostrar2(){
+        for (int c=0;c<cc;c++){
+            for (int f=0;f<cf;f++){
+                cout<<m[f][c]<<" , ";
+            }
+            cout<<endl;
+        }
     }
     
-    
-     void mostrar8() {
-         int cf=m.size()-1;
-         int cc=m[0].size()-1;
-        for (int c = cc; c >= 0; c--) {
-             for (int f = cf; f>=0; f--) {
-                 cout << m[f][c]<<" , ";
-             }
-             cout << endl;
-          }
-    }
-    void mostrar3() {
-         int cf=m.size()-1;
-         int cc=m[0].size()-1;
-        for (int f = 0; f <= cf; f++) {
-             for (int c = cf; c>=0; c--) {
-                 cout << m[f][c]<<" , ";
-             }
-             cout << endl;
-          }
+    void mostrar5(){
+        for (int f=(cf-1);f>=0;f--){
+            for (int c=(cc-1);c>=0;c--){
+                cout<<m[f][c]<<" , ";
+            }
+            cout<<endl;
+        }
     }
     
-    void mostrar12() {
-        int cf=m.size()-1;
-        int cc=m[0].size()-1;
-        
-        for (int f = 0; f <= cf; f++) {
+    void mostrarVibora(){
+        for(int f =0;f<cf;f++){
             if(f%2==0){
-               for (int c = 0; c<=cf; c++) {
-                 cout << m[f][c]<<" , ";
-             }  
+              for (int c=0;c<cc;c++){
+                cout<<m[f][c]<<" , ";
+              }  
             }else{
-               for (int c = cf; c>=0; c--) {
-                 cout << m[f][c]<<" , ";
-             }  
+               for (int c=(cc-1);c>=0;c--){
+                cout<<m[f][c]<<" , ";
+              }    
             }
-            
-             cout << endl;
-          }
+            cout<<endl;
+        }
     }
     
-     void mostrarDiagonalP() {
-        for (int f = 0; f < m.size(); f++) {
-                 cout << m[f][f]<<" , ";
-          }
-    }
-     void mostrarDiagonalS() {
-        for (int f = 0; f < m.size(); f++) {
-                 cout << m[f][m.size()-1-f]<<" , ";
-          }
+    int frecuenciaEle(int ele){
+        int ce=0;
+        for (int f=0;f<cf;f++){
+            for (int c=0;c<cc;c++){
+                if(m[f][c]==ele){
+                    ce++;
+                }
+            }
+        }
+        return ce;
     }
     
+    int elementoMasRepetido(){
+        int ele=m[0][0];
+        int cant=frecuenciaEle(m[0][0]);
+        int ce=0;
+         for (int f=0;f<cf;f++){
+            for (int c=0;c<cc;c++){
+                ce=frecuenciaEle(m[f][c]);
+                if(ce>cant){
+                    ele=m[f][c];
+                    cant=ce;
+                }
+            }
+        }
+        return ele;
+    }
+    int elementoMayor(){
+        int ele=m[0][0];
+        for (int f=0;f<cf;f++){
+            for (int c=0;c<cc;c++){
+                if(m[f][c]>ele){
+                    ele=m[f][c];
+                }
+            }
+        }
+        return ele;
+    }
+    int elementoMenor(){
+        int ele=m[0][0];
+        for (int f=0;f<cf;f++){
+            for (int c=0;c<cc;c++){
+                if(m[f][c]<ele){
+                    ele=m[f][c];
+                }
+            }
+        }
+        return ele;
+    }
 };
-// Programa principal para probar la clase
+
+
+
 int main() {
-   /* Vector v;
-    v.cargarRandom(10,1,8);
-    v.mostrar();
-    v.intercalarPrimoNoPrimo();
-    v.mostrar();*/
     Matriz m;
-    m.cargarOrdenado();
-    m.mostrar();
-     cout << endl;
-    m.mostrar8();
-    cout << endl;
-     m.mostrar12();
-   /* cout<<endl;
-    m.mostrarDiagonalP();
-    cout<<endl;
-    m.mostrarDiagonalS();*/
-   // Vector v;
-   // v.cargar();
-   //v.cargarRandom(12,10,69);
-   // cout << "Vector ingresado: ";
-    //v.mostrar();
-    //Vector v1,v2,v3;
-    //v.cantidadElementosRepetidos(v1,v2);
-    //v.cantidadElementosRango(v1,v2,v3,10);
-    //v.mostrar();
-    //v1.mostrar();
-   // v2.mostrar();
-//    v3.mostrar();
     
-    
-    /*Vector v1,v2,v3;
-    v.cantidadElementosRango(v1,v2,v3,10);
-    v.mostrar();
-    v1.mostrar();
-    v2.mostrar();
-    v3.mostrar();*/
-    //v.segmentarPrimoNoPrimo();
-    //v.mostrar();
-    //v.segmentarParImpar();
-    //v.mostrar();
-    //cout<<"Existen : "<<v.cantPrimos()<<" primos."<<endl;
-    //cout<<"Existen : "<<v.cantFibos()<<" fibo(s)."<<endl;
-    //cout<<"Pos del primer Primo : "<<v.primerPosPrimo();
-    //v.primos();
-    //v.ordenarAsc();
-    //v.mostrar();
-    //v.ordenarDesc();
-    //v.mostrar();
-    //v.mostrarPosPares();
-    //v.ordenarSegAsc(3,8);
-   // v.ordenarPosParesAsc();
-    //v.mostrar();
-    //v.mostrarPosImpares();
-   // cout << "La suma de los elementos es: " << v.sumarElementos() << endl;
+    //m.cargar(3,3);
+    m.matrizCargada();
+    m.mostrarVibora();
+    cout<<"Elemento mayor : "<<m.elementoMayor();
+   // cout<<"Elemento mas repetido: "<<m.elementoMasRepetido();
+    //cout<<"Elemento : 1 se repite: "<<m.frecuenciaEle(1);
+   /* m.mostrar1();
+   cout<<endl;
+    m.mostrar2();
+   cout<<endl;
+    m.mostrar5();*/
     return 0;
 }
