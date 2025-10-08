@@ -13,7 +13,7 @@ class Matriz{ //nombre de la clase
     void matrizCargada(){
         m.clear();
         cc=3; cf=3;
-       m={{2,2,7},{6, 5, 4},{1, 2, 2}};
+       m={{3,2,1},{2,10,7},{6,5,4}};
        
     }
     void matrizCargada2(){
@@ -316,6 +316,8 @@ class Matriz{ //nombre de la clase
        }   
        return false;
    }
+   
+   
    bool matrizIncluidaEnOtra(Matriz m2){
        for(int f=0;f<cf;f++){
            for(int c=0;c<cc;c++){
@@ -327,20 +329,162 @@ class Matriz{ //nombre de la clase
        return true;
    }
    
+   void intercambiar(int f1,int c1,int f2,int c2){
+       int aux=m[f1][c1];
+       m[f1][c1]=m[f2][c2];
+       m[f2][c2]=aux;
+   }
+   
+   void intercambioColumnas(int c1,int c2){
+       for(int f=0;f<cf;f++){
+         intercambiar(f,c1,f,c2);  
+       }
+   }
+  
+   void ordenarColEnBaseAunaFila(int fila){
+       for(int c1=0;c1<cc;c1++){
+          for(int c2=c1+1;c2<cc;c2++){
+           if(m[fila][c1]>m[fila][c2]){
+               intercambioColumnas(c1,c2);
+           }
+         } 
+       }
+   }
+   
+   void ordenarElemPorFrec(){
+       int fre1,fre2;
+       int puntero;
+       for(int c1=(cc-1);c1>=0;c1--){
+           for(int f1=0;f1<cf;f1++){//ele 1
+              
+              for(int c2=c1 ;c2>=0;c2--){//ele2
+                  if(c1==c2){
+                     puntero= f1;
+                  }else{
+                      puntero = 0;
+                  }
+                  for(int f2=puntero;f2<cf;f2++){
+                      fre1=frecuencia(m[f1][c1]);
+                      fre2=frecuencia(m[f2][c2]);
+                      if(fre2>fre1||
+                         (fre1==fre2 && m[f2][c2]<m[f1][c1])){
+                             intercambiar(f1,c1,f2,c2);
+                         }
+                  }
+              } 
+               
+           }
+       }
+   }
+   
+   
+   void segmentarParesImpares(){
+       int e1,e2,puntero;
+       for(int c1=0 ;c1<cc;c1++){
+           for(int f1=(cf-1);f1>=0;f1--){
+              
+              for(int c2=c1 ;c2<cc;c2++){
+                  if(c1==c2){
+                      puntero=f1;
+                  }   else{
+                      puntero=cf-1;
+                  }
+                  for(int f2=puntero;f2>=0;f2--){
+                      e1=m[f1][c1];
+                      e2=m[f2][c2];
+                      if(e1%2==1 && e2%2==0 ||
+                         e1%2==1 && e2%2==1 && e1>e2 ||
+                         e1%2==0 && e2%2==0 && e1>e2){
+                             intercambiar(f1,c1,f2,c2);
+                             //mostrar1();
+                             //cout<<endl;
+                         }
+                  }
+              }
+           }
+       }
+   }
+   
+   bool esFibo(int nro){
+       int a=-1;int b=1;
+       int f=0;
+       while(f<=nro){
+           f=a+b;
+           a=b;
+           b=f;
+           if(f==nro){
+               return true;
+           }
+       }
+       return false;
+   }
+   
+   void intercalarFiboNoFibo(){
+       int e1,e2, puntero;
+       bool bandera=true;
+       for(int c1=0;c1<cc;c1++){
+           for(int f1=(cf-1);f1>=0;f1--){
+               if(bandera){//fibos
+                   for(int c2=c1;c2<cc;c2++){
+                       if(c1==c2){
+                           puntero=f1;
+                       }else{
+                           puntero=cf-1;
+                       }
+                       for(int f2=puntero;f2>=0;f2--){
+                           e1=m[f1][c1];
+                           e2=m[f2][c2];
+                           if(!esFibo(e1)&&esFibo(e2) ||
+                              !esFibo(e1)&&!esFibo(e2)&& e1>e2 || 
+                              esFibo(e1)&&esFibo(e2)&& e1>e2 ){
+                                  intercambiar(f1,c1,f2,c2);
+                              }
+                       }
+                   }
+               }else{//no fibo
+                   for(int c2=c1;c2<cc;c2++){
+                       if(c1==c2){
+                           puntero=f1;
+                       }else{
+                           puntero=cf-1;
+                       }
+                       for(int f2=puntero;f2>=0;f2--){
+                           e2=m[f1][c1];
+                           e1=m[f2][c2];
+                           if(!esFibo(e1)&&esFibo(e2) ||
+                              !esFibo(e1)&&!esFibo(e2)&& e1<e2 || 
+                              esFibo(e1)&&esFibo(e2)&& e1<e2 ){
+                                  intercambiar(f1,c1,f2,c2);
+                              }
+                       }
+                   }
+               }
+               bandera=!bandera;
+               
+           }
+       }
+   }
+   
+   
 };
 
 
 
 int main() {
-    Matriz m,m2;
+    Matriz m,m2,mr;
     
     //m.cargar(3,3);
     m.matrizCargada();
     m2.matrizCargada2();
     m.mostrar1();
     cout<<endl;
-    
-    cout<<m.matrizIncluidaEnOtra(m2);
+   // m.ordenarColEnBaseAunaFila(0);
+  // m.ordenarElemPorFrec();
+ // m.segmentarParesImpares();
+ m.intercalarFiboNoFibo();
+    m.mostrar1();
+    m.multiplicarMatriz(m2,mr);
+  //  cout<<m.matrizIncluidaEnOtra(m2);
    // m.segmentarFilasParesImpares();
  //  m.interCambiar0filaconultimafila();
 // m.segmentarFilasPareseImpares();
